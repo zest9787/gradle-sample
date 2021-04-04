@@ -1,0 +1,5 @@
+rootProject.name = 'gradle-sample'
+include 'gradle-common'
+include 'gradle-admin'
+include 'gradle-api'
+

@@ -1,0 +1,75 @@
+buildscript {
+    ext {
+        springBootVersion = '2.4.4'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group 'site.heehee.samples'
+    version '1.0-SNAPSHOT'
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'io.springfox:springfox-swagger-common:3.0.0'
+        implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+        implementation 'io.springfox:springfox-swagger2:3.0.0'
+
+        implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
+
+        compileOnly 'org.projectlombok:lombok:1.18.18'
+
+        annotationProcessor 'org.projectlombok:lombok:1.18.18'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':gradle-admin') {
+    dependencies {
+        compile project(':gradle-common')
+        implementation 'de.codecentric:spring-boot-admin-starter-server:2.4.0'
+    }
+}
+
+project(':gradle-api') {
+    dependencies {
+        compile project(':gradle-common')
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+        implementation 'de.codecentric:spring-boot-admin-starter-client:2.4.0'
+
+    }
+}
+
+project(':gradle-common') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+    }
+}
