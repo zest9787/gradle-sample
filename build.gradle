@@ -71,5 +71,6 @@ project(':gradle-api') {
 project(':gradle-common') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-aop'
+        implementation 'com.auth0:java-jwt:3.14.0'
     }
 }
