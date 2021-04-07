@@ -1,12 +1,11 @@
 package site.heehee.samples.common.config;
 
-import net.rakugakibox.util.YamlResourceBundle;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
-
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,9 +13,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
+@Slf4j
 @Configuration
 public class MessageConfiguration implements WebMvcConfigurer {
 
@@ -39,23 +37,13 @@ public class MessageConfiguration implements WebMvcConfigurer {
         return slr;
     }
 
-    @Bean
-    public MessageSource messageSource(@Value("${spring.message.basename") String name,
-                                       @Value("${spring.message.encoding") String encoding) {
-        YamlMessageSource yms = new YamlMessageSource();
-        yms.setBasename(name);
-        yms.setDefaultEncoding(encoding);
-        yms.setAlwaysUseMessageFormat(true);
-        yms.setUseCodeAsDefaultMessage(true);
-        yms.setFallbackToSystemLocale(true);
-
-        return yms;
-    }
-
-    private class YamlMessageSource extends ResourceBundleMessageSource {
-        @Override
-        protected ResourceBundle doGetBundle(String basename, Locale locale) throws MissingResourceException {
-            return ResourceBundle.getBundle(basename, locale, YamlResourceBundle.Control.INSTANCE);
-        }
+    @Bean("messageSource")
+    public MessageSource messageSource(@Value("${spring.messages.basename}") String name,
+                                       @Value("${spring.messages.encoding}") String encoding) {
+        log.info("name : {}, encoding : {}", name, encoding);
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasenames(name.split(","));
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }

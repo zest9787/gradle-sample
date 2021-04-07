@@ -1,0 +1,6 @@
+GET http://localhost:9010/api/hello
+Accept: application/json
+
+###
+GET http://localhost:9010/api/helloE
+Accept: application/json

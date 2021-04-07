@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.heehee.samples.common.advice.exception.BaseUserNotFoundException;
 import site.heehee.samples.common.annotation.Token;
 import site.heehee.samples.common.event.publisher.LoggingEventPublisher;
 
@@ -22,5 +23,11 @@ public class HelloController {
     public String hello(@Token String username) {
         loggingEventPublisher.publish("Logging Event 전달");
         return "hello";
+    }
+
+    @GetMapping("/helloE")
+    public String helloException() throws Exception {
+        throw new BaseUserNotFoundException();
+//        return "hello";
     }
 }
